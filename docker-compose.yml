@@ -1,0 +1,9 @@
+version: '3'
+services:
+  yarn:
+    build: .
+    ports:
+     - "8080:3000"
+    volumes:
+     - "$PWD:/ws"
+    working_dir: "/ws/src"
