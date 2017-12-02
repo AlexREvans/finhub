@@ -1,24 +1,27 @@
-var aggregatedData = require('./aggregator.js');
+var aggregator = require('./aggregator.js');
 
-module.exports = function (rootName) {
+module.exports = function (rootName, sunburstConsumer) {
 
-    var transactionsByTag = aggregatedData.reduce((tbt, classifiedTransaction) => {
-        tbt[classifiedTransaction.tag] = (tbt[classifiedTransaction.tag] || [])
-            .concat(classifiedTransaction.transaction);
-        return tbt;
-    }
-        , {})
+    aggregator(aggregatedData => {
+
+        var transactionsByTag = aggregatedData.reduce((tbt, classifiedTransaction) => {
+            tbt[classifiedTransaction.tag] = (tbt[classifiedTransaction.tag] || [])
+                .concat(classifiedTransaction.transaction);
+            return tbt;
+        }, {})
 
 
-    var sunburst = {
-        name: rootName,
-        children: Object.keys(transactionsByTag).map(tag => ({
-            name: tag,
-            children: transactionsByTag[tag].map(transaction => ({
-                name: transaction.name,
-                value: transaction.amount
+        var sunburst = {
+            name: rootName,
+            children: Object.keys(transactionsByTag).map(tag => ({
+                name: tag,
+                children: transactionsByTag[tag].map(transaction => ({
+                    name: transaction.name,
+                    value: transaction.amount
+                }))
             }))
-        }))
-    }
-    return sunburst;
+        }
+        sunburstConsumer(sunburst);
+    })
+
 };

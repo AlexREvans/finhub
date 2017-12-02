@@ -7,7 +7,10 @@ var sunburstData = require('../data/sunburst.js')
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express', svgstuff: sunburst(sunburstData("Transactions")) });
+
+  sunburstData("Transactions", sunburstData => res.render('index', { title: 'Express', svgstuff: sunburst(sunburstData) }))
+
+  
 });
 
 module.exports = router;
