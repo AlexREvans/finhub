@@ -28,7 +28,7 @@ module.exports = function (root = flare) {
     var arc = d3.arc()
       .startAngle(function (d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x0))); })
       .endAngle(function (d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x1))); })
-      .innerRadius(function (d) { return Math.max(0, y(d.y0)); })
+      .innerRadius(function (d) { return Math.max(0, 30+y(d.y0)); })
       .outerRadius(function (d) { return Math.max(0, y(d.y1)); });
 
 

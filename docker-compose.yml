@@ -7,3 +7,18 @@ services:
     volumes:
      - "$PWD:/ws"
     working_dir: "/ws/src"
+    links:
+     - db:db
+    environment:
+      DB_PASS: "$MYSQL_ROOT_PASSWORD"
+      DB_DATABASE: "$MYSQL_DATABASE"
+
+  db:
+    image: mysql
+    ports:
+     - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "$MYSQL_ROOT_PASSWORD"
+      MYSQL_DATABASE: "$MYSQL_DATABASE"
+    volumes:
+      - "$PWD/db:/docker-entrypoint-initdb.d"
