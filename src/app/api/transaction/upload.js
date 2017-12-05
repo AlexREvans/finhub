@@ -16,6 +16,11 @@ var csvToTransactions = csv => {
     }))
 }
 
+// var transactions = [
+//     { source: 'A', name: 'B', amount: 10, class: 'C', example: true},
+//     { source: 'A', name: 'B', amount: 3}
+// ]
+
 var csvFile = (fileName, transactionsConsumer) =>
     parseCsvFile(fileName, data => {
         var transactions = csvToTransactions(data)
