@@ -1,5 +1,5 @@
 var mysql = require('mysql')
-var env = require('.././env')
+var env = require('./env')
 
 var config = {
     host: 'db',
