@@ -1,4 +1,9 @@
-var list = () => []
+var list = () => [
+    { source: 'A', name: 'B', amount: 3},
+    { source: 'A', name: 'B', amount: 3},
+    { source: 'A', name: 'B', amount: 3},
+    { source: 'A', name: 'B', amount: 3}
+]
 
 var toggleExample = (transactionId, isExample) => transactionId
 

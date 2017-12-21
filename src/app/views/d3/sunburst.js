@@ -1,7 +1,5 @@
 var d3Wrapper = require('./d3Wrapper.js');
 var chromatic = require('d3-scale-chromatic');
-var flare = require('./flare.js');
-
 
 
 var sunburstTransformer = function (rootName, sunburstConsumer) {
