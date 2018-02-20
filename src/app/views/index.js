@@ -14,7 +14,24 @@ router.get('/', function (req, res, next) {
       title: 'Express',
       transactions: transactions
     }))
-    
+
 })
+
+router.get('/create', function (req, res, next) {
+
+  var {name, amount, source} = req.query
+
+    transactionApi.add({
+      name, amount, source
+    })
+    
+    transactionApi.list(transactions => 
+      res.render('index', {
+        title: 'Express',
+        transactions: transactions
+      }))
+
+  })
+  
 
 module.exports = router;

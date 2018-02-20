@@ -8,5 +8,6 @@ module.exports = {
     list: data.list,
     upload: csvFile,
     setExample,
-    removeExample
+    removeExample,
+    add: trans => data.insertTransactions([trans])
 }
