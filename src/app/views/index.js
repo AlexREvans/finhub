@@ -7,18 +7,19 @@ var bars = require('./d3/barChart.js')
 var transactionApi = require('../api/transaction')
 var classificationApi = require('../api/classification')
 
-var reloadList = res =>
-  transactionApi.list(transactions =>
-    res.render('index', {
-      title: 'Express',
-      transactions: transactions
-    }))
 
-router.get('/', function (req, res, next) {
-  reloadList(res)
+const renderTransactions = (res, transactions) =>
+  res.render('index', {
+    title: 'Express',
+    transactions: transactions
+  });
+
+
+router.get('/', async function (req, res, next) {
+  renderTransactions(res, await transactionApi.list())
 })
 
-router.get('/create', function (req, res, next) {
+router.get('/create', async function (req, res, next) {
 
   var { name, amount, source } = req.query
 
@@ -26,27 +27,30 @@ router.get('/create', function (req, res, next) {
     name, amount, source
   })
 
-  reloadList(res)
+  renderTransactions(res, await transactionApi.list())
 })
 
 router.get('/tag', function (req, res, next) {
 
   var { transactionId, tag } = req.query
 
+
   // TODO: Loading happens twice. Refactor.
-  transactionApi.setTag(transactionId, tag, () =>
-    transactionApi.list(transactions => {
+  transactionApi.setTag(transactionId, tag, async function() {
 
 
-      const classifiedTransactions =
-        classificationApi.classifyTransactions(transactions)
-        .map(classified => ({...classified.transaction, tag: classified.tag}))
-    
+    let transactions = await transactionApi.list()
 
-      transactionApi.updateTags(classifiedTransactions, () => reloadList(res))
+    const classifiedTransactions =
+      classificationApi.classifyTransactions(transactions)
+        .map(classified => ({ ...classified.transaction, tag: classified.tag }))
 
-     } )
-    )}
+    transactionApi.updateTags(classifiedTransactions, () => {})
+
+    renderTransactions(res, classifiedTransactions)
+
+  })
+}
 
 )
 

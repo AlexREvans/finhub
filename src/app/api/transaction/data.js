@@ -1,17 +1,19 @@
 var db = require('../database')
 
-var list = (resultConsumer) => db(conn =>
-    conn.query(
-        "select * from transaction;", 
-        (err, rows) => {
-            resultConsumer(rows.map(row => ({
-                source: row.source,
-                name: row.transaction_name,
-                amount: row.amount,
-                tag: row.tag,
-                id: row.id
-            })))
-        }))
+var list = () => new Promise(resolve => {
+    db(conn =>
+        conn.query(
+            "select * from transaction;",
+            (err, rows) => {
+                resolve(rows.map(row => ({
+                    source: row.source,
+                    name: row.transaction_name,
+                    amount: row.amount,
+                    tag: row.tag,
+                    id: row.id
+                })))
+            }))
+})
 
 var setTags = (transactions, afterTagged) => {
 
@@ -28,7 +30,7 @@ var setTags = (transactions, afterTagged) => {
 }
 
 var setTag = (transactionId, tag, afterTagged) =>
-    setTags([{ id: transactionId, tag:tag }], afterTagged)
+    setTags([{ id: transactionId, tag: tag }], afterTagged)
 
 var insertTransactions = transactions =>
     db(conn => transactions
