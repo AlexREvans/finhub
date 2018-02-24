@@ -13,7 +13,7 @@ var findClosestExample = (transaction, examples, threshold = 40) => examples
     }))
     .reduce(
     (a, b) => (a.similarity > b.similarity ? a : b),
-    { example: { class: 'UNCLASSIFIED' }, similarity: threshold });
+    { example: { tag: 'UNCLASSIFIED' }, similarity: threshold });
 
 
 module.exports = {

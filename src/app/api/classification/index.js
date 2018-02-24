@@ -1,14 +1,13 @@
 var { findClosestExample } = require('./similarity')
-var { updateTransactions } = require('./data')
 
 var Classification = (transaction, example, similarity) => ({
-    tag: example.class,
+    tag: example.tag,
     matchingExample: { example, similarity },
     transaction
 });
 
-var classify = transaction => {
-    if (transaction.example) {
+var classify = (transaction, examples) => {
+    if (transaction.tag) {
         return Classification(
             transaction,
             transaction,
@@ -23,9 +22,13 @@ var classify = transaction => {
         closestExample.similarity);
 };
 
-var classifyTransactions = (transactions, examples) => transactions
-    .map(classify)
-    .map(updateTransactions)
+var classifyTransactions = (transactions) => {
+
+    const examples = transactions.filter(trans => trans.tag)
+    const classifications = transactions.map(trans => classify(trans, examples))
+
+    return classifications
+}
 
 module.exports = {
     classifyTransactions

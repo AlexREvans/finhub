@@ -2,9 +2,8 @@ var db = require('../database')
 
 var list = (resultConsumer) => db(conn =>
     conn.query(
-        "select * from transaction;", {},
+        "select * from transaction;", 
         (err, rows) => {
-
             resultConsumer(rows.map(row => ({
                 source: row.source,
                 name: row.transaction_name,
@@ -14,11 +13,22 @@ var list = (resultConsumer) => db(conn =>
             })))
         }))
 
-var setTag = (transactionId, tag, afterTagged) => db(conn => conn.query(
-    "update transaction set tag = ? where id = ?;", [tag, transactionId],
-    () => afterTagged()
-))
+var setTags = (transactions, afterTagged) => {
 
+    const batchUpdate = transactions.map(trans => db.format(
+        "update transaction set tag = ? where id = ?",
+        [trans.tag, trans.id])
+    ).join(";")
+
+    db(conn => conn.query(
+        batchUpdate,
+        (err, rows) => afterTagged()
+    ))
+
+}
+
+var setTag = (transactionId, tag, afterTagged) =>
+    setTags([{ id: transactionId, tag:tag }], afterTagged)
 
 var insertTransactions = transactions =>
     db(conn => transactions
@@ -34,5 +44,6 @@ var insertTransactions = transactions =>
 module.exports = {
     list,
     insertTransactions,
-    setTag
+    setTag,
+    setTags
 }

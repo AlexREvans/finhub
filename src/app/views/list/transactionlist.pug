@@ -1,8 +1,6 @@
 table
     thead
         tr 
-            th ID
-            th Source
             th Name
             th Amount
             th Tag
@@ -10,8 +8,6 @@ table
     tbody
         each trans in transactions
             tr
-                td #{trans.id}
-                td #{trans.source}
                 td #{trans.name}
                 td #{trans.amount}
                 td #{trans.tag}
@@ -19,4 +15,4 @@ table
                     form(action="/tag")
                         input(name="tag")
                         input(name="transactionId" hidden=true value=trans.id) 
-                        input(type="submit")
+                        input(type="submit" hidden=true)

@@ -5,6 +5,7 @@ var sunburst = require('./d3/sunburst.js')
 var bars = require('./d3/barChart.js')
 
 var transactionApi = require('../api/transaction')
+var classificationApi = require('../api/classification')
 
 var reloadList = res =>
   transactionApi.list(transactions =>
@@ -32,9 +33,22 @@ router.get('/tag', function (req, res, next) {
 
   var { transactionId, tag } = req.query
 
-  transactionApi.setTag(transactionId, tag, () => reloadList(res))
+  // TODO: Loading happens twice. Refactor.
+  transactionApi.setTag(transactionId, tag, () =>
+    transactionApi.list(transactions => {
 
-})
+
+      const classifiedTransactions =
+        classificationApi.classifyTransactions(transactions)
+        .map(classified => ({...classified.transaction, tag: classified.tag}))
+    
+
+      transactionApi.updateTags(classifiedTransactions, () => reloadList(res))
+
+     } )
+    )}
+
+)
 
 
 module.exports = router;
