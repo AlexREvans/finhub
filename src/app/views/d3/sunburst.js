@@ -11,8 +11,8 @@ var sunburstTransformer = function (rootName, sunburstConsumer) {
                   .concat(classifiedTransaction.transaction);
               return tbt;
           }, {})
-  
-  
+
+          
           var sunburst = {
               name: rootName,
               children: Object.keys(transactionsByTag).map(tag => ({

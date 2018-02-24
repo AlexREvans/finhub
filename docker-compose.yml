@@ -7,6 +7,8 @@ services:
     volumes:
      - "$PWD:/ws"
     working_dir: "/ws/src"
+    depends_on: 
+     - db
     links:
      - db:db
     environment:
