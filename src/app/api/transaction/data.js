@@ -1,19 +1,22 @@
 var db = require('../database')
 
-var list = () => new Promise(resolve => {
-    db(conn =>
-        conn.query(
-            "select * from transaction;",
-            (err, rows) => {
-                resolve(rows.map(row => ({
-                    source: row.source,
-                    name: row.transaction_name,
-                    amount: row.amount,
-                    tag: row.tag,
-                    id: row.id
-                })))
-            }))
-})
+var query = async function (str, args) {
+    return new Promise(resolve =>
+        db(connection => connection.query(str, args, (err, res) => resolve({ err, res })))
+    )
+}
+
+var list = async function () {
+    let { err, res } = await query("select * from transaction;")
+
+    return res.map(row => ({
+        source: row.source,
+        name: row.transaction_name,
+        amount: row.amount,
+        tag: row.tag,
+        id: row.id
+    }))
+}
 
 var setTags = (transactions, afterTagged) => {
 
