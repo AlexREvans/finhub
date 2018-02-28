@@ -46,12 +46,13 @@ router.get('/tag', async function (req, res, next) {
 
   const classifiedTransactions =
     classificationApi.classifyTransactions(transactions)
-      .map(classified => ({ ...classified.transaction, tag: classified.tag }))
+      .map(classified => ({ ...classified.transaction, tag: classified.tag, 
+        updated: classified.transaction.tag !== classified.tag }))
 
   renderTransactions(res, classifiedTransactions)
 
   const transactionsToUpdate = classifiedTransactions
-    .filter(classification => classification.tag !== classification.transaction.tag)
+    .filter(classification => classification.updated)
 
   transactionApi.updateTags(classifiedTransactions)
 })

@@ -25,7 +25,8 @@ const asD3 = function (root = flare) {
     var x = d3.scaleLinear()
       .range([0, 2 * Math.PI]);
 
-    var y = d3.scaleSqrt()
+    var y = d3.scalePow()
+      .exponent(1.5)
       .range([0, radius]);
 
     var color = d3.scaleOrdinal(d3.schemeCategory20);
@@ -35,7 +36,7 @@ const asD3 = function (root = flare) {
     var arc = d3.arc()
       .startAngle(function (d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x0))); })
       .endAngle(function (d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x1))); })
-      .innerRadius(function (d) { return Math.max(0, 30 + y(d.y0)); })
+      .innerRadius(function (d) { return Math.max(0, 5 + y(d.y0)); })
       .outerRadius(function (d) { return Math.max(0, y(d.y1)); });
 
 
