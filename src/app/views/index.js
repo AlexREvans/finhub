@@ -23,36 +23,30 @@ router.get('/create', async function (req, res, next) {
 
   var { name, amount, source } = req.query
 
-  transactionApi.add({
+  await transactionApi.add({
     name, amount, source
   })
 
   renderTransactions(res, await transactionApi.list())
 })
 
-router.get('/tag', function (req, res, next) {
+router.get('/tag', async function (req, res, next) {
 
   var { transactionId, tag } = req.query
 
+  await transactionApi.setTag(transactionId, tag)
+  const transactions = await transactionApi.list()
 
-  // TODO: Loading happens twice. Refactor.
-  transactionApi.setTag(transactionId, tag, async function() {
+  const classifiedTransactions =
+    classificationApi.classifyTransactions(transactions)
+      .map(classified => ({ ...classified.transaction, tag: classified.tag }))
 
+  renderTransactions(res, classifiedTransactions)
 
-    let transactions = await transactionApi.list()
+  const transactionsToUpdate = classifiedTransactions
+    .filter(classification => classification.tag !== classification.transaction.tag)
 
-    const classifiedTransactions =
-      classificationApi.classifyTransactions(transactions)
-        .map(classified => ({ ...classified.transaction, tag: classified.tag }))
-
-    transactionApi.updateTags(classifiedTransactions, () => {})
-
-    renderTransactions(res, classifiedTransactions)
-
-  })
-}
-
-)
-
+  transactionApi.updateTags(classifiedTransactions)
+})
 
 module.exports = router;

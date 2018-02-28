@@ -6,6 +6,6 @@ module.exports = {
     list: data.list,
     upload: csvFile,
     setTag: data.setTag,
-    add: trans => data.insertTransactions([trans]),
+    add: async function (trans) {return data.insertTransactions([trans])},
     updateTags: data.setTags
 }

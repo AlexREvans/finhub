@@ -14,7 +14,29 @@ var connConsumer = function (connectionConsumer) {
     connection.connect()
     connectionConsumer(connection)
     connection.end()
-} 
-connConsumer.format = mysql.format
+}
 
-module.exports = connConsumer
+var queryBatch = (str, args) => {
+
+    if(args.length === 0) {
+        return new Promise (resolve => resolve({}))
+    }
+
+    const query = args.map(arg => mysql.format(str, arg)).join(";")
+
+    console.log('[DB] ' + query)
+
+    return new Promise(resolve =>
+        connConsumer(connection => connection.query(query, (err, res) => {
+            const status = !!err ? '[FAIL]' : '[ OK ]'
+            console.log('[DB] ' + status + ' ' + err)
+            resolve({ err, res })
+        }))
+    )
+}
+
+var query = (str, args) => queryBatch(str, [args])
+
+module.exports = {
+    query, queryBatch
+}
