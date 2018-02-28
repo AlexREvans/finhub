@@ -1,35 +1,19 @@
 var d3Wrapper = require('./d3Wrapper.js');
 var chromatic = require('d3-scale-chromatic');
 
+const sunburstTransformer = transactionsByTag =>
+  ({
+    name: "Some name",
+    children: Object.keys(transactionsByTag).map(tag => ({
+      name: tag,
+      children: transactionsByTag[tag].map(transaction => ({
+        name: transaction.name,
+        value: transaction.amount
+      }))
+    }))
+  })
 
-var sunburstTransformer = function (rootName, sunburstConsumer) {
-  
-      aggregator(aggregatedData => {
-  
-          var transactionsByTag = aggregatedData.reduce((tbt, classifiedTransaction) => {
-              tbt[classifiedTransaction.tag] = (tbt[classifiedTransaction.tag] || [])
-                  .concat(classifiedTransaction.transaction);
-              return tbt;
-          }, {})
-
-          
-          var sunburst = {
-              name: rootName,
-              children: Object.keys(transactionsByTag).map(tag => ({
-                  name: tag,
-                  children: transactionsByTag[tag].map(transaction => ({
-                      name: transaction.name,
-                      value: transaction.amount
-                  }))
-              }))
-          }
-          sunburstConsumer(sunburst);
-      })
-  
-  };
-
-
-module.exports = function (root = flare) {
+const asD3 = function (root = flare) {
   return d3Wrapper(function (d3, svg) {
 
     var width = 960,
@@ -51,7 +35,7 @@ module.exports = function (root = flare) {
     var arc = d3.arc()
       .startAngle(function (d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x0))); })
       .endAngle(function (d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x1))); })
-      .innerRadius(function (d) { return Math.max(0, 30+y(d.y0)); })
+      .innerRadius(function (d) { return Math.max(0, 30 + y(d.y0)); })
       .outerRadius(function (d) { return Math.max(0, y(d.y1)); });
 
 
@@ -76,4 +60,6 @@ module.exports = function (root = flare) {
 
     return svg;
   })
-};
+}
+
+module.exports = transByTag => asD3(sunburstTransformer(transByTag))

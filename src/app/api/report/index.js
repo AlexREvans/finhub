@@ -1,6 +1,9 @@
 var groupTransactionsByTag = transactions => transactions
     .reduce((tbt, transaction) => {
-        tbt[transaction.tag] = (tbt[transaction.tag] || [])
+
+        var tag = transaction.tag || "UNCLASSIFIED"
+
+        tbt[tag] = (tbt[tag] || [])
             .concat(transaction);
         return tbt;
     }, {})

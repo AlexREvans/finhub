@@ -2,17 +2,24 @@ var express = require('express')
 var router = express.Router()
 
 var sunburst = require('./d3/sunburst.js')
-var bars = require('./d3/barChart.js')
 
 var transactionApi = require('../api/transaction')
 var classificationApi = require('../api/classification')
 
+var report = require('../api/report')
 
-const renderTransactions = (res, transactions) =>
+const renderTransactions = (res, transactions) => {
+  const transByTag = report.groupTransactionsByTag(transactions)
+
+  console.log("Group transactions")
+  console.log(JSON.stringify(transByTag, null, 2))
+
   res.render('index', {
     title: 'Express',
-    transactions: transactions
-  });
+    transactions: transactions,
+    sunburstTransByTag: sunburst(transByTag)
+  })
+}
 
 
 router.get('/', async function (req, res, next) {
