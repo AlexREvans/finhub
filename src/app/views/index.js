@@ -37,4 +37,12 @@ router.get('/tag', async function (req, res, next) {
   renderTransactions(res, await transactionApi.setTagAndReclassify(transactionId, tag))
 })
 
+router.post('/upload', async function(req,res) {
+
+  const {csv} = req.files
+  const {source} = req.body
+
+  renderTransactions(res, await transactionApi.upload(source, csv.data))
+})
+
 module.exports = router;

@@ -1,31 +1,20 @@
 var parse = require('csv-parse')
 var fs = require('fs')
-var { insertTransactions } = require('./data')
 
-var parseCsvFile = (fileName, dataCallback) =>
-    fs.readFile(fileName, 'utf8', (err, data) =>
-        parse(data, {}, (err, transactions) =>
-            dataCallback(!!err ? [] : transactions)))
+var parseCsvFile = (data) => new Promise(resolve =>
+    parse(data, {}, (err, csv) => resolve({ err, csv })))
 
 var csvToTransactions = csv => {
     csv.shift();
     return csv.map(row => ({
-        source: 'C',
-        name: row[3],
-        amount: row[2].substring(1, row[2].length) * 1
+        name: row[0],
+        amount: row[1]
     }))
 }
 
-// var transactions = [
-//     { source: 'A', name: 'B', amount: 10, class: 'C', example: true},
-//     { source: 'A', name: 'B', amount: 3}
-// ]
-
-var csvFile = (fileName, transactionsConsumer) =>
-    parseCsvFile(fileName, data => {
-        var transactions = csvToTransactions(data)
-        transactionsConsumer(insertTransactions(transactions))
-    })
+var csvFile = async function (data) {
+    return csvToTransactions((await parseCsvFile(data)).csv)
+}
 
 module.exports = {
     csvFile

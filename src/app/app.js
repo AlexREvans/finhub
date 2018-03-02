@@ -21,6 +21,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+const fileUpload = require('express-fileupload');
+// default options
+app.use(fileUpload());
+
 app.use('/', index);
 
 // catch 404 and forward to error handler
