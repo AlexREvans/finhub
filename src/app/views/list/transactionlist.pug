@@ -1,18 +1,19 @@
-table
-    thead
-        tr 
-            th Name
-            th Amount
-            th Tag
-            th Assign Tag
-    tbody
-        each trans in transactions
-            tr
-                td #{trans.name}
-                td #{trans.amount}
-                td #{trans.tag}
-                td 
-                    form(action="/tag")
-                        input(name="tag")
-                        input(name="transactionId" hidden=true value=trans.id) 
-                        input(type="submit" hidden=true)
+mixin list(transactions)
+    table
+        thead
+            tr 
+                th Name
+                th Amount
+                th Tag
+                th Assign Tag
+        tbody
+            each trans in transactions
+                tr
+                    td #{trans.name}
+                    td #{trans.amount}
+                    td #{trans.tag}
+                    td 
+                        form(action="/tag")
+                            input(name="tag")
+                            input(name="transactionId" hidden=true value=trans.id) 
+                            input(type="submit" hidden=true)

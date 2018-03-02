@@ -11,7 +11,9 @@ const renderTransactions = (res, transactions) => {
   res.render('index', {
     title: 'Express',
     transactions: transactions,
-    sunburstTransByTag: sunburst(transByTag)
+    sunburstTransByTag: sunburst(transByTag),
+    untaggedTransactions: transactions.filter(trans => !trans.tag),
+    transByTag
   })
 }
 
