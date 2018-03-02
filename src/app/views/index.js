@@ -13,7 +13,10 @@ const renderTransactions = (res, transactions) => {
     transactions: transactions,
     sunburstTransByTag: sunburst(transByTag),
     untaggedTransactions: transactions.filter(trans => !trans.tag),
-    transByTag
+    transSpend : Object.keys(transByTag).reduce((res, tag) => {
+      res[tag] = transByTag[tag].map(t => t.amount).reduce((a,b) => a+b, 0)
+      return res
+    }, {})
   })
 }
 

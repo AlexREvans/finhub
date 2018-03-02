@@ -1,0 +1,10 @@
+table
+    thead
+        tr 
+            th Tag
+            th Amount
+    tbody
+        each tag in Object.keys(transSpend)
+            tr
+                td #{tag}
+                td #{transSpend[tag]}
