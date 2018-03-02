@@ -1,12 +1,21 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
-  div#map !{sunburstTransByTag}
-  include create/upload.pug
-  include create/transaction.pug
-  include list/transactionlist.pug
-  include list/tagspend.pug
-  +list(untaggedTransactions)
-  +list(transactions)
+  div(class="container")
+    h1= title
+    p Welcome to #{title}
+    div#map !{sunburstTransByTag}
+    include create/upload.pug
+    br
+    br
+    include create/transaction.pug
+    br
+    br
+    include list/transactionlist.pug
+    include list/tagspend.pug
+    br
+    br
+    +list(untaggedTransactions, 'Untagged Transactions')
+    br
+    br
+    +list(transactions, 'All Transactions')

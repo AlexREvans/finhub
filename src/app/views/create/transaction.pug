@@ -1,11 +1,13 @@
-form(action="/create") 
-    label Name:
-    input(name="name")
-    br
-    label Amount:
-    input(name="amount", type="number")
-    br
-    label Source:
-    input(name="source")
-    br
+form(action="/create")
+    label(class="h3") Create a transaction
+    div(class="row")
+        label(class="col-3") Name:
+        input(name="name" class="col-9")
+    div(class="row")
+        label(class="col-3") Amount:
+        input(name="amount" type="number" class="col-9")
+    div(class="row")
+        label(class="col-3") Source:
+        input(name="source" class="col-9")
+    
     input(type="submit")

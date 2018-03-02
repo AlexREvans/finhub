@@ -2,7 +2,11 @@ form(
     action="/upload" 
     method="post" 
     encType="multipart/form-data") 
-    label Upload:
-    input(type="file" name="csv")
-    input(name="source")
+    label(class="h3") Upload transactions
+    div(class="row")
+        label(class="col-3") Upload:
+        input(type="file" name="csv" class="col-9")
+    div(class="row")
+        label(class="col-3") Source:
+        input(name="source" class="col-9")
     input(type="submit")

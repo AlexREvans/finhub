@@ -1,5 +1,6 @@
-mixin list(transactions)
-    table
+mixin list(transactions, title)
+    label(class="h3") #{title}
+    table(class="table")
         thead
             tr 
                 th Name
